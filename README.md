@@ -7,11 +7,14 @@
 3. Place map images in dayz-dma-cpp/mapcontent folder
 
 Features:
-- Fuser ESP
+- Radar Follow Player
+- Box ESP
+- Item ESP
+- Vehicle / Boat ESP
 - Map Radar
 - Loot Filter
 - Player List
-- Server Player list with steam ids
+- Server Player list with Steam IDs
 
 Credits:
 
