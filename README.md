@@ -7,10 +7,14 @@
 3. Place map images in dayz-dma-cpp/mapcontent folder
 
 Features:
-Fuser ESP
-Map Radar
-Loot Filter
+- Fuser ESP
+- Map Radar
+- Loot Filter
+- Player List
+- Server Player list with steam ids
 
 Credits:
+
 Samtron
+
 https://www.unknowncheats.me/forum/dayz-sa/606723-dma-dayz-fuser-esp-radar-source-release.html
