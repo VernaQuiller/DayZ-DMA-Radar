@@ -1,5 +1,5 @@
 # DayZ DMA Radar
-![image](https://github.com/user-attachments/assets/14b40575-12cd-4211-a786-a67c997d8670)
+![image](https://github.com/user-attachments/assets/93622023-20a9-4ce4-b5f6-c7c00232bea8)
 
 
 1. Change to your survivor name in Radaradapter.cpp
