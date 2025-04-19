@@ -1,7 +1,7 @@
 # DayZ DMA Radar
 ![yes](https://github.com/user-attachments/assets/b95c3548-644f-4701-b979-0c4f5ab3d83c)
 
-1. Download Maps @ https://mega.nz/file/5uMD3LwS#9yuYntYQJ45-No9GuwJvLHBwaeb42col_GUEk0l1Lpc
+1. Download Maps @ https://www.mediafire.com/file/rdl3bs5lc8jk1ym/mapcontent.rar/file
 2. Place map images in dayz-dma-cpp/mapcontent folder
 3. Set to Release
 4. Build Solution
