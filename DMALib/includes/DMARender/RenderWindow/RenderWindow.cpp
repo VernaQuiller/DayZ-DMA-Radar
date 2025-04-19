@@ -200,7 +200,7 @@ void DMARender::RenderWindow::drawMapHandler() {
     ImGui::Begin("Radar Settings", nullptr, ImGuiWindowFlags_AlwaysAutoResize | ImGuiWindowFlags_NoResize);
 
     static int selectedTab = 0;
-    static bool followPlayerEnabled = true;
+    static bool followPlayerEnabled = false;
 
 
     // add tabs
