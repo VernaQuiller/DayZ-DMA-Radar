@@ -1,20 +1,20 @@
 # DayZ DMA Radar
-![image](https://github.com/user-attachments/assets/93622023-20a9-4ce4-b5f6-c7c00232bea8)
+![yes](https://github.com/user-attachments/assets/b95c3548-644f-4701-b979-0c4f5ab3d83c)
 
-
-1. Change to your survivor name in Radaradapter.cpp
-2. Download Maps @ https://mega.nz/file/5uMD3LwS#9yuYntYQJ45-No9GuwJvLHBwaeb42col_GUEk0l1Lpc
-3. Place map images in dayz-dma-cpp/mapcontent folder
+1. Download Maps @ https://mega.nz/file/5uMD3LwS#9yuYntYQJ45-No9GuwJvLHBwaeb42col_GUEk0l1Lpc
+2. Place map images in dayz-dma-cpp/mapcontent folder
+3. Set to Release
+4. Build Solution
+5. .exe located at x64\Release\DayZ-DMA.exe
 
 Features:
 - Radar Follow Player
 - Box ESP
-- Item ESP
+- Item ESP + Filters
 - Vehicle / Boat ESP
 - Map Radar
-- Loot Filter
 - Player List
-- Server Player list with Steam IDs
+- Server Player list with Steam IDs + Watch list
 
 Credits:
 
