@@ -178,6 +178,7 @@
     <ClInclude Include="includes\DMARender\IOverlay\IOverlay.h" />
     <ClInclude Include="includes\DMARender\Vectors\Vector2.h" />
     <ClInclude Include="includes\DMARender\Vectors\Vector3.h" />
+    <ClInclude Include="resource.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="DMALib.cpp" />
@@ -225,6 +226,17 @@
       <FileType>Document</FileType>
     </CopyFileToFolders>
     <CopyFileToFolders Include="libs\symsrv.dll">
+      <FileType>Document</FileType>
+    </CopyFileToFolders>
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="DMALib.rc" />
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="..\dma-dayz-cpp\53ac2d01e41ff949c11c916309ae17b7.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <CopyFileToFolders Include="libs\symsrv.yes">
       <FileType>Document</FileType>
     </CopyFileToFolders>
   </ItemGroup>

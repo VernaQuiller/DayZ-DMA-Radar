@@ -15,6 +15,7 @@ namespace DayZ {
 		NONE,
 		GROUNDITEM,
 		PLAYER,
+		ZOMBIE,
 		CAR,
 		BOAT,
 		ANIMAL,
@@ -24,7 +25,11 @@ namespace DayZ {
 		BACKPACK,
 		FOOD,
 		AMMO,
-		RARE
+		RARE,
+		OPTICS,
+		BASE,
+		MELEE,
+		EXPLOSIVES
 	};
 
 	class Entity : public DMAMem::MemoryObject {
@@ -48,6 +53,10 @@ namespace DayZ {
 			if (_entityType == ENTITY_TYPE::NONE) {
 				if (!strcmp("dayzplayer", this->EntityTypePtr->ConfigName->value)) {
 					_entityType = ENTITY_TYPE::PLAYER;
+					return;
+				}
+				if (!strcmp("dayzinfected", this->EntityTypePtr->ConfigName->value)) {
+					_entityType = ENTITY_TYPE::ZOMBIE;
 					return;
 				}
 				if (!strcmp("car", this->EntityTypePtr->ConfigName->value)) {
@@ -89,6 +98,22 @@ namespace DayZ {
 				if (strstr(this->EntityTypePtr->ModelName->value, "firearms") != NULL ||
 					strcmp("Weapon", this->EntityTypePtr->ConfigName->value) == 0) {
 					_entityType = ENTITY_TYPE::WEAPON;
+					return;
+				}
+				if (!strcmp("itemoptics", this->EntityTypePtr->ConfigName->value)) {
+					_entityType = ENTITY_TYPE::OPTICS;
+					return;
+				}
+				if (strstr(this->EntityTypePtr->ModelName->value, "camping") != NULL) {
+					_entityType = ENTITY_TYPE::BASE;
+					return;
+				}
+				if (strstr(this->EntityTypePtr->ModelName->value, "melee") != NULL) {
+					_entityType = ENTITY_TYPE::MELEE;
+					return;
+				}
+				if (strstr(this->EntityTypePtr->ModelName->value, "explosives") != NULL) {
+					_entityType = ENTITY_TYPE::EXPLOSIVES;
 					return;
 				}
 
@@ -149,6 +174,10 @@ namespace DayZ {
 			return getEntityType() == PLAYER;
 		}
 
+		bool isZombie() {
+			return getEntityType() == ZOMBIE;
+		}
+
 		bool isCar() {
 			return getEntityType() == CAR;
 		}
@@ -192,6 +221,23 @@ namespace DayZ {
 		bool isGroundItem() {
 			return getEntityType() == GROUNDITEM;
 		}
+
+		bool isOptic() {
+			return getEntityType() == OPTICS;
+		}
+
+		bool isBase() {
+			return getEntityType() == BASE;
+		}
+
+		bool isMelee() {
+			return getEntityType() == MELEE;
+		}
+
+		bool isExplosives() {
+			return getEntityType() == EXPLOSIVES;
+		}
+
 
 		std::shared_ptr<ScoreboardIdentity> getPlayerIdentity(DayZ::Scoreboard* scoreboard) {
 			for (const auto ident : scoreboard->resolvedIdentities) {

@@ -9,7 +9,7 @@ void DayZ::Entity::loadRareItems(const std::string& filePath) {
 	rareItems.clear();
 	std::ifstream file(filePath);
 	if (!file.is_open()) {
-		std::cerr << "Warnung: Datei " << filePath << " konnte nicht geöffnet werden. Seltene Gegenstände werden nicht geladen.\n";
+		std::cerr << "Warning: File RareItems.txt" << filePath << " could not be opened. Rare items are not loading.\n";
 		return;
 	}
 
@@ -22,6 +22,7 @@ void DayZ::Entity::loadRareItems(const std::string& filePath) {
 	file.close();
 
 	if (rareItems.empty()) {
-		std::cerr << "Warnung: Datei " << filePath << " enthält keine gültigen Einträge.\n";
+		std::cerr << "Warning: File RareItems.txt" << filePath << " contains no valid entries.\n";
 	}
 }
+

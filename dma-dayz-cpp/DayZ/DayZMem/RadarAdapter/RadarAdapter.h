@@ -12,7 +12,7 @@ namespace DayZ {
 		void loadFavoriteSteamIDs(const std::string& filePath); // function to load SteamIDs from textfile
 		ImFont* radarFont;
 		ImFont* tableFont;
-		void drawLoot(DMARender::IGameMap* curMap, const DMARender::MapTransform& mTransform, const std::vector<std::shared_ptr<DayZ::Entity>>& entities);
+		void drawLoot(DayZ::Camera* camera, DMARender::IGameMap* curMap, const DMARender::MapTransform& mTransform, const std::vector<std::shared_ptr<DayZ::Entity>>& entities);
 		void drawAliveEntities(DayZ::Camera* camera, DMARender::IGameMap* curMap, const DMARender::MapTransform& mTransform, const std::vector<std::shared_ptr<DayZ::Entity>>& entities, Scoreboard* scoreboard);
 		void drawPlayerList(DayZ::Camera* camera, Scoreboard* scoreboard);
 		void drawServerPlayerList(std::shared_ptr<DayZ::Scoreboard> scoreboard);

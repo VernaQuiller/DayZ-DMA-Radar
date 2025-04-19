@@ -69,6 +69,12 @@
     <ClCompile Include="DayZ\Maps\Sakhal.cpp">
       <Filter>Source Files\map</Filter>
     </ClCompile>
+    <ClCompile Include="DayZ\Maps\Takistan.cpp">
+      <Filter>Source Files\map</Filter>
+    </ClCompile>
+    <ClCompile Include="DayZ\Maps\Banov.cpp">
+      <Filter>Source Files\map</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="DayZ\Structs\ArmaString.h">
@@ -162,9 +168,18 @@
       <Filter>Header Files\Maps</Filter>
     </ClInclude>
     <ClInclude Include="DayZ\Maps\Alteria.h">
-      <Filter>Header Files</Filter>
+      <Filter>Header Files\Maps</Filter>
     </ClInclude>
     <ClInclude Include="DayZ\Maps\Lux.h">
+      <Filter>Header Files\Maps</Filter>
+    </ClInclude>
+    <ClInclude Include="DayZ\Maps\Takistan.h">
+      <Filter>Header Files\Maps</Filter>
+    </ClInclude>
+    <ClInclude Include="DayZ\Maps\Banov.h">
+      <Filter>Header Files\Maps</Filter>
+    </ClInclude>
+    <ClInclude Include="resource.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
@@ -193,5 +208,15 @@
     <CopyFileToFolders Include="mapcontent\takistan.png">
       <Filter>Resource Files</Filter>
     </CopyFileToFolders>
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="dma-dayz-cpp.rc">
+      <Filter>Resource Files</Filter>
+    </ResourceCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="53ac2d01e41ff949c11c916309ae17b7.ico">
+      <Filter>Resource Files</Filter>
+    </Image>
   </ItemGroup>
 </Project>

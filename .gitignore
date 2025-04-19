@@ -361,3 +361,11 @@ MigrationBackup/
 
 # Fody - auto-generated XML schema
 FodyWeavers.xsd
+/dma-dayz-cpp/mapcontent/alteria.png
+/dma-dayz-cpp/mapcontent/chernarusplus.png
+/dma-dayz-cpp/mapcontent/banov.png
+/dma-dayz-cpp/mapcontent/deadfall.png
+/dma-dayz-cpp/mapcontent/livonia.png
+/dma-dayz-cpp/mapcontent/namalsk.png
+/dma-dayz-cpp/mapcontent/sakhal.png
+/dma-dayz-cpp/mapcontent/takistan.png

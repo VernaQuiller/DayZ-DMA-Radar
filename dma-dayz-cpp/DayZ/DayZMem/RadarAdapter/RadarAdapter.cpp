@@ -6,7 +6,6 @@
 extern ImVec2 g_mainPlayerScreenPos;
 extern ImVec2 g_mainPlayerScreenPosBuffered;
 
-
 // Constructor
 DayZ::RadarAdapter::RadarAdapter(std::shared_ptr<DayZ::MemoryUpdater> memUpdater, std::shared_ptr<DMARender::RenderBridge> renderBridge)
 	: memUpdater(memUpdater), renderBridge(renderBridge) {
@@ -15,7 +14,7 @@ DayZ::RadarAdapter::RadarAdapter(std::shared_ptr<DayZ::MemoryUpdater> memUpdater
 }
 
 // draw loot and dead entities with filters
-void DayZ::RadarAdapter::drawLoot(DMARender::IGameMap* curMap, const DMARender::MapTransform& mTransform, const std::vector<std::shared_ptr<DayZ::Entity>>& entities)
+void DayZ::RadarAdapter::drawLoot(DayZ::Camera* camera, DMARender::IGameMap* curMap, const DMARender::MapTransform& mTransform, const std::vector<std::shared_ptr<DayZ::Entity>>& entities)
 {
 	
 	if (!renderBridge) return; // If the render bridge is not initialized, return
@@ -32,6 +31,13 @@ void DayZ::RadarAdapter::drawLoot(DMARender::IGameMap* curMap, const DMARender::
 	bool showFood = renderBridge->shouldShowFood();
 	bool showAmmo = renderBridge->shouldShowAmmo();
 	bool showRare = renderBridge->shouldShowRare();
+	bool showOptics = renderBridge->shouldShowOptics();
+	bool showBase = renderBridge->shouldShowBase();
+	bool showMelee = renderBridge->shouldShowMelee();
+	bool showExplosives = renderBridge->shouldShowExplosives();
+	int RadarFont2 = renderBridge->shouldRadarFont2();
+	int blipSize2 = renderBridge->shouldBlipSize2();
+	int LootDistanceDeadzone = renderBridge->shouldLootDistanceDeadzone();
 
 
 
@@ -39,72 +45,67 @@ void DayZ::RadarAdapter::drawLoot(DMARender::IGameMap* curMap, const DMARender::
 		if (!item->isValid())
 			continue;
 
-		if (
-			!(item->isWeapon() && showWeapons) &&
-			!(item->isProxyMagazines() && showProxyMagazines) &&
-			!(item->isBackpack() && showBackpacks) &&
-			!(item->isClothing() && showClothing) &&
-			!(item->isFood() && showFood) &&
-			!(item->isAmmo() && showAmmo) &&
-			!(item->isRare() && showRare) &&
-			!(item->isGroundItem() && showGrounditems) &&
-			!(item->isPlayer() && item->isDead && showDeadPlayers) &&
-			!(item->isCar() && showVehicles) &&
-			!(item->isBoat() && showBoats) &&
-			!(item->isAnimal() && item->isDead && showDeadAnimals)
-			) {
-			continue;
-		}
-
 		std::string postFix = "";
 
 		ImU32 textCol;
 
+		float dist = camera->InvertedViewTranslation.Dist(item->FutureVisualStatePtr->position);
+
 		// Color for Items and Dead players/animals
-		if (item->isPlayer()) {
+		if (item->isPlayer() && item->isDead && showDeadPlayers) {
 			textCol = IM_COL32(0, 255, 255, 255);
 			postFix = " (Dead)";
-		} else if (item->isAnimal()) {
-			textCol = IM_COL32(0, 255, 0, 100);
+		} else if (item->isAnimal() && item->isDead && showDeadAnimals) {
+			textCol = IM_COL32(0, 255, 0, 255);
 			postFix = " (Dead)";
-		} else if (item->isCar()) {
-			textCol = IM_COL32(255, 0, 245, 200);
-		} else if (item->isBoat()) {
-			textCol = IM_COL32(255, 0, 245, 200);
-		} else if (item->isRare()) {
-			textCol = IM_COL32(23, 100, 128, 200);
-		} else if (item->isBackpack()) {
-			textCol = IM_COL32(175, 255, 0, 100);
-		} else if (item->isClothing()) {
-			textCol = IM_COL32(255, 255, 0, 200);
-		} else if (item->isWeapon()) {
-			textCol = IM_COL32(255, 117, 50, 180);
-		} else if (item->isProxyMagazines()) {
-			textCol = IM_COL32(255, 117, 50, 180);
-		} else if (item->isFood()) {
-			textCol = IM_COL32(174, 197, 191, 200);
-		} else if (item->isAmmo()) {
-			textCol = IM_COL32(255, 117, 50, 180);
-		} else if (item->isGroundItem()) {
-			textCol = IM_COL32(255, 255, 255, 200);
-
+		} else if (item->isCar() && showVehicles) {
+			textCol = IM_COL32(255, 0, 245, 255);
+		} else if (item->isBoat() && showBoats) {
+			textCol = IM_COL32(255, 0, 245, 255);
+		} else if (item->isRare() && showRare) {
+			textCol = IM_COL32(255, 0, 255, 255);
+		} else if (item->isBackpack() && showBackpacks) {
+			textCol = IM_COL32(175, 255, 0, 255);
+		} else if (item->isClothing() && showClothing) {
+			textCol = IM_COL32(255, 255, 0, 255);
+		} else if (item->isWeapon() && showWeapons) {
+			textCol = IM_COL32(255, 0, 100, 255);
+		} else if (item->isProxyMagazines() && showProxyMagazines) {
+			textCol = IM_COL32(255, 117, 50, 255);
+		} else if (item->isFood() && showFood) {
+			textCol = IM_COL32(50, 140, 50, 255);
+		} else if (item->isAmmo() && showAmmo) {
+			textCol = IM_COL32(255, 117, 50, 255);
+		} else if (item->isGroundItem() && showGrounditems) {
+			textCol = IM_COL32(255, 255, 255, 255);
+		} else if (item->isOptic() && showOptics) {
+			textCol = IM_COL32(0, 150, 255, 255);
+		} else if (item->isBase() && showBase) {
+			textCol = IM_COL32(0, 150, 255, 255);
+		} else if (item->isMelee() && showMelee) {
+			textCol = IM_COL32(0, 150, 255, 255);
+		} else if (item->isExplosives() && showExplosives) {
+			textCol = IM_COL32(255, 0, 120, 255);
 		}
 		else
 		{
 			continue;
 		}
+		
 
+		if (dist < LootDistanceDeadzone)
+			continue;
+		
 		auto screenPos = WorldToRadar(curMap, mTransform, item->FutureVisualStatePtr->position);
 
 		auto bestName = item->EntityTypePtr->getBestString();
 
 		if (bestName) {
-			drawBlip(screenPos, 4, textCol, 12, 1, { bestName->value + postFix });
+			drawBlip(screenPos, blipSize2, textCol, RadarFont2, 1, { bestName->value + postFix });
 		}
 
 	}
 }
-
 
 void DayZ::RadarAdapter::drawAliveEntities(DayZ::Camera* camera, DMARender::IGameMap* curMap, const DMARender::MapTransform& mTransform, const std::vector<std::shared_ptr<DayZ::Entity>>& entities, Scoreboard* scoreboard)
 {
@@ -114,7 +115,20 @@ void DayZ::RadarAdapter::drawAliveEntities(DayZ::Camera* camera, DMARender::IGam
 	neutralTransform.dragOffsetX = 0;
 	neutralTransform.dragOffsetY = 0;
 	static ImVec2 lastValidScreenPos = ImVec2(0, 0);
-	std::vector<std::string> MainPlayerPlayingNames = { "Jon" };
+
+	if (!renderBridge) return; // If the render bridge is not initialized, return
+
+	bool showZombies = renderBridge->shouldShowZombies();
+	bool showAnimals = renderBridge->shouldShowAnimals();
+	std::string PlayerNameYES = renderBridge->shouldPlayerName();
+	int BlipSize = renderBridge->shouldBlipSize();
+	int Aimlinelength = renderBridge->shouldAimlinelength();
+	int RadarFont = renderBridge->shouldRadarFont();
+	int ZombiesBlipSize = renderBridge->shouldZombiesBlipSize();
+	int AnimalsBlipSize = renderBridge->shouldAnimalsBlipSize();
+
+
+	std::vector<std::string> MainFollowPlayer = { PlayerNameYES };
 
 
 	for (auto ent : entities) {
@@ -124,30 +138,47 @@ void DayZ::RadarAdapter::drawAliveEntities(DayZ::Camera* camera, DMARender::IGam
 			continue;
 
 		ImU32 blipColor;
-		float blipSize;
 
 		bool ismainplayPlayer = false;
-		
-		// Check for Main player names
 		std::vector<std::string> infoText;
+
+
+		// neutral MainPlayerPos
+		ImVec2 neutralPos = WorldToRadar(curMap, neutralTransform, ent->FutureVisualStatePtr->position);
+		// final "MainPlayerScreenPos"
+		ImVec2 screenPos = WorldToRadar(curMap, mTransform, ent->FutureVisualStatePtr->position);
 
 		if (ent->isPlayer()) {
 			auto ident = ent->getPlayerIdentity(scoreboard);
 			if (ident && ident->PlayerName) {
-				ismainplayPlayer = std::find(MainPlayerPlayingNames.begin(), MainPlayerPlayingNames.end(), ident->PlayerName->value) != MainPlayerPlayingNames.end();
+				ismainplayPlayer = std::find(MainFollowPlayer.begin(), MainFollowPlayer.end(), ident->PlayerName->value) != MainFollowPlayer.end();
 			}
 		}
 
 		// ALIFE ENTITIES colors
 		if (ismainplayPlayer) {
-			blipColor = IM_COL32(255, 0, 255, 255); 
-			blipSize = 6;
-		} else if (ent->isPlayer()) {
+			blipColor = IM_COL32(0, 255, 0, 255);
+
+			// update global (static) Pos if MainPlayer
+			ImVec2 newPos = WorldToRadar(curMap, mTransform, ent->FutureVisualStatePtr->position);
+			// try for smooth interpolation
+			float smoothFactor = 0.5f;  // Anpassbar
+			g_mainPlayerScreenPos = ImVec2(
+				lastValidScreenPos.x + (neutralPos.x - lastValidScreenPos.x) * smoothFactor,
+				lastValidScreenPos.y + (neutralPos.y - lastValidScreenPos.y) * smoothFactor
+			);
+			lastValidScreenPos = g_mainPlayerScreenPos;
+
+
+		}
+		else if (ent->isPlayer()) {
 			blipColor = IM_COL32(255, 0, 0, 255);
-			blipSize = 6;
-		} else if (ent->isAnimal()) {
+		}
+		else if (ent->isZombie() && showZombies) {
+			blipColor = IM_COL32(255, 255, 0, 255);
+		}
+		else if (ent->isAnimal() && showAnimals) {
 			blipColor = IM_COL32(0, 255, 0, 130);
-			blipSize = 4;
 		}
 		else {
 			continue;
@@ -157,31 +188,13 @@ void DayZ::RadarAdapter::drawAliveEntities(DayZ::Camera* camera, DMARender::IGam
 		float dist = camera->InvertedViewTranslation.Dist(ent->FutureVisualStatePtr->position);
 
 
-		// neutral MainPlayerPos
-		ImVec2 neutralPos = WorldToRadar(curMap, neutralTransform, ent->FutureVisualStatePtr->position);
-		// final "MainPlayerScreenPos"
-		ImVec2 screenPos = WorldToRadar(curMap, mTransform, ent->FutureVisualStatePtr->position);
-
-		// update global (static) Pos if MainPlayer
-		if (ismainplayPlayer) {
-			ImVec2 newPos = WorldToRadar(curMap, mTransform, ent->FutureVisualStatePtr->position);
-
-			// try for smooth interpolation
-			float smoothFactor = 0.3f;  // Anpassbar
-			g_mainPlayerScreenPos = ImVec2(
-				lastValidScreenPos.x + (neutralPos.x - lastValidScreenPos.x) * smoothFactor,
-				lastValidScreenPos.y + (neutralPos.y - lastValidScreenPos.y) * smoothFactor
-			);
-
-			lastValidScreenPos = g_mainPlayerScreenPos;
-		}
 		if (ent->isAnimal()) {
 			auto entBestStr = ent->EntityTypePtr->getBestString();
 			if (entBestStr) {
 				auto entName = std::string(ent->EntityTypePtr->getBestString()->value);
 				infoText.push_back(entName);
 			}
-			/// infoText.push_back(std::format("{:.0f}m", dist)); show distance for animals
+			//infoText.push_back(std::format("{:.0f}m", dist)); //show distance for animals
 		}
 		if (ent->isPlayer()) {
 			auto ident = ent->getPlayerIdentity(scoreboard);
@@ -208,22 +221,27 @@ void DayZ::RadarAdapter::drawAliveEntities(DayZ::Camera* camera, DMARender::IGam
 		}
 
 		if (ent->isPlayer()) {
-			drawBlipDirectional(screenPos, blipSize, blipColor, 14, 1, infoText, ent->FutureVisualStatePtr->getRotationCorrected());
+			drawBlipDirectional(screenPos, BlipSize, blipColor, RadarFont, 1, infoText, ent->FutureVisualStatePtr->getRotationCorrected(), Aimlinelength);
+		}
+		if (ent->isZombie()) {
+			drawBlip(screenPos, ZombiesBlipSize, blipColor, RadarFont, 1, infoText);
+		}
+		if (ent->isAnimal()) {
+			drawBlip(screenPos, AnimalsBlipSize, blipColor, RadarFont, 1, infoText);
 		}
 		else {
-			drawBlip(screenPos, blipSize, blipColor, 13, 1, infoText);
-
+			continue;
+			//drawBlip(screenPos, BlipSize, blipColor, RadarFont, 1, infoText);
 		}
 	}
-
 }
 
 void DayZ::RadarAdapter::drawPlayerList(DayZ::Camera* camera, Scoreboard* scoreboard) {
 	static bool includeSlowEntities = false; // Checkbox-Status
 
 	// load small table font
-	ImGui::PushFont(tableFont);
-	ImGui::Begin("Player List", nullptr, ImGuiWindowFlags_AlwaysAutoResize);
+	//ImGui::PushFont(tableFont);
+	ImGui::Begin("Local Player List", nullptr, ImGuiWindowFlags_AlwaysAutoResize);
 
 	// add checkbox for SlowEntityTable, experimenal to find invis admins
 	ImGui::Checkbox("Include SlowEntityTable", &includeSlowEntities);
@@ -272,6 +290,10 @@ void DayZ::RadarAdapter::drawPlayerList(DayZ::Camera* camera, Scoreboard* scoreb
 
 				float distance = camera->InvertedViewTranslation.Dist(entity->FutureVisualStatePtr->position);
 
+				// dont show self
+				//if (distance < 3.1)
+					//continue;
+
 				// different color for SlowEntityTable
 				bool isSlowEntity = slowEntityIDs.count(networkID) > 0;
 				ImU32 rowColor = isSlowEntity ? IM_COL32(255, 255, 0, 255) : IM_COL32(255, 255, 255, 255);
@@ -286,14 +308,6 @@ void DayZ::RadarAdapter::drawPlayerList(DayZ::Camera* camera, Scoreboard* scoreb
 				// Player Name
 				ImGui::TableNextColumn();
 				ImGui::Text("%s", playerName);
-
-				// Steam ID with clickable functionality
-				//ImGui::TableNextColumn();
-				//if (ImGui::Selectable(steamID, false, ImGuiSelectableFlags_SpanAllColumns)) {
-				//	std::string steamLink = "https://steamcommunity.com/profiles/";
-				//	steamLink += steamID;
-				//	ImGui::SetClipboardText(steamLink.c_str()); // copy to clipboard
-				//}
 
 				// Network ID
 				//ImGui::TableNextColumn();
@@ -313,7 +327,7 @@ void DayZ::RadarAdapter::drawPlayerList(DayZ::Camera* camera, Scoreboard* scoreb
 
 		ImGui::EndTable();
 	}
-	ImGui::PopFont(); // back to default font
+	//ImGui::PopFont(); // back to default font
 	ImGui::End();
 }
 
@@ -322,9 +336,10 @@ void DayZ::RadarAdapter::drawServerPlayerList(std::shared_ptr<DayZ::Scoreboard> 
 	std::unordered_set<int> seenNetworkIDs;
 
 		// table setup
-	ImGui::PushFont(tableFont);
+	//ImGui::PushFont(tableFont);
 	ImGui::Begin("Server Player List", nullptr, ImGuiWindowFlags_AlwaysAutoResize);
 
+	ImGui::Text("Click to Copy Profile Link to Clipboard");
 	if (ImGui::BeginTable("ServerPlayerTable", 3, ImGuiTableFlags_Borders | ImGuiTableFlags_RowBg)) {
 		ImGui::TableSetupColumn("#"); 
 		ImGui::TableSetupColumn("Player Name");
@@ -371,33 +386,34 @@ void DayZ::RadarAdapter::drawServerPlayerList(std::shared_ptr<DayZ::Scoreboard> 
 				steamLink += steamID;
 				ImGui::SetClipboardText(steamLink.c_str()); // copy to clipboard
 			}
-
+			ImGui::PopStyleColor();
 			// Network ID
 			//ImGui::TableNextColumn();
 			//ImGui::Text("%u", networkID);
 		}
 
+		//ImGui::PopFont();
 		ImGui::EndTable();
 	}
 
-	ImGui::PopFont();
 	ImGui::End();
 }
-
-
 
 void DayZ::RadarAdapter::DrawOverlay(DMARender::IGameMap* curMap, const DMARender::MapTransform& mTransform)
 {
 	auto camera = memUpdater->getCamera();
-	ImGui::PushFont(radarFont);
+	//ImGui::PushFont(radarFont);
+	//ImGui::PopFont();
 
 	// draw radar entities/items
-	drawLoot(curMap, mTransform, memUpdater->getSlowEntityTable()->resolvedEntities);
-	drawLoot(curMap, mTransform, memUpdater->getItemTable()->resolvedEntities);
-	drawLoot(curMap, mTransform, memUpdater->getNearEntityTable()->resolvedEntities);
-	drawLoot(curMap, mTransform, memUpdater->getFarEntityTable()->resolvedEntities);
+	drawLoot(camera.get(), curMap, mTransform, memUpdater->getSlowEntityTable()->resolvedEntities);
+	drawLoot(camera.get(), curMap, mTransform, memUpdater->getItemTable()->resolvedEntities);
+	drawLoot(camera.get(), curMap, mTransform, memUpdater->getNearEntityTable()->resolvedEntities);
+	drawLoot(camera.get(), curMap, mTransform, memUpdater->getFarEntityTable()->resolvedEntities);
 	drawAliveEntities(camera.get(), curMap, mTransform, memUpdater->getFarEntityTable()->resolvedEntities, memUpdater->getScoreboard().get());
 	drawAliveEntities(camera.get(), curMap, mTransform, memUpdater->getNearEntityTable()->resolvedEntities, memUpdater->getScoreboard().get());
+
+	//ImGui::PopFont();
 
 	// draw localplayerlist
 	if (renderBridge->shouldShowPlayerList()) {
@@ -407,7 +423,6 @@ void DayZ::RadarAdapter::DrawOverlay(DMARender::IGameMap* curMap, const DMARende
 	if (renderBridge->shouldShowServerPlayerList()) {
 		drawServerPlayerList(memUpdater->getScoreboard());
 	}
-	ImGui::PopFont();
 }
 
 void DayZ::RadarAdapter::createFonts()
@@ -416,19 +431,18 @@ void DayZ::RadarAdapter::createFonts()
 		config.OversampleH = 3;
 		config.OversampleV = 1;
 		config.GlyphExtraSpacing.x = 1.0f;
-		radarFont = ImGui::GetIO().Fonts->AddFontFromFileTTF("C:\\Windows\\Fonts\\Arial.ttf", 32, &config);
+		radarFont = ImGui::GetIO().Fonts->AddFontFromFileTTF("C:\\Windows\\Fonts\\Arial.ttf", 12, &config);
 
 		// add small font
 		ImFontConfig configSmall;
 		configSmall.SizePixels = 12.0f; // reduce size?
-		tableFont = ImGui::GetIO().Fonts->AddFontFromFileTTF("C:\\Windows\\Fonts\\Arial.ttf", 13, &configSmall);
+		tableFont = ImGui::GetIO().Fonts->AddFontFromFileTTF("C:\\Windows\\Fonts\\Arial.ttf", 14, &configSmall);
 }
-
 
 void DayZ::RadarAdapter::loadFavoriteSteamIDs(const std::string& filePath) {
 	std::ifstream file(filePath);
 	if (!file.is_open()) {
-		std::cerr << "Fehler: SteamID-Datei konnte nicht geöffnet werden: " << filePath << std::endl;
+		std::cerr << "Error: SteamID file could not be opened: " << filePath << std::endl;
 		return;
 	}
 
