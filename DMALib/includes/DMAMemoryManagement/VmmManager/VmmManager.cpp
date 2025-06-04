@@ -2,18 +2,24 @@
 
 VMM_HANDLE DMAMem::VmmManager::getVmm() {
 	if (!hVMM) {
-		hVMM = initialize();
+		hVMM = initialize(true);
 	}
 	return hVMM;
 }
 
 
-VMM_HANDLE DMAMem::VmmManager::initialize()
+VMM_HANDLE DMAMem::VmmManager::initialize(bool debug)
 {
 	VMMDLL_CloseAll();
 	std::cout << " [ + ] Connecting to DMA Card..." << std::endl;
 
-	LPSTR args[] = { LPSTR(""), LPSTR("-device"), LPSTR("fpga://algo=0") };
+	LPCSTR args[] = { const_cast<LPCSTR>(""), const_cast<LPCSTR>("-device"), const_cast<LPCSTR>("fpga://algo=0"), const_cast<LPCSTR>(""), const_cast<LPCSTR>(""), const_cast<LPCSTR>(""), const_cast<LPCSTR>("") };
+	DWORD argc = 3;
+	if (debug)
+	{
+		args[argc++] = const_cast<LPCSTR>("-v");
+		args[argc++] = const_cast<LPCSTR>("-printf");
+	}
 
 	VMM_HANDLE handle = VMMDLL_Initialize(3, args);
 	if (!handle)

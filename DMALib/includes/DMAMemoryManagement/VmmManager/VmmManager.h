@@ -12,7 +12,7 @@ namespace DMAMem {
 	class VmmManager {
 	private:
 			VMM_HANDLE hVMM;
-			VMM_HANDLE initialize();
+			VMM_HANDLE initialize(bool debug);
 	public:
 			VMM_HANDLE getVmm();
 			BOOL readMemory(DWORD pid, QWORD remoteAddress, void* destination, int size, ULONG64 flags = VMMDLL_FLAG_NOCACHE);

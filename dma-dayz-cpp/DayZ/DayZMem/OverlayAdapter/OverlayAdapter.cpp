@@ -16,6 +16,8 @@ void DayZ::OverlayAdapter::drawLoot(DayZ::Camera* camera, const std::vector<std:
 
 	if (!renderBridge) return; // If the render bridge is not initialized, return
 
+
+
 	bool showVehicles = renderBridge->shouldShowVehiclesFUSER();
 	bool showBoats = renderBridge->shouldShowBoatsFUSER();
 	bool showGrounditems = renderBridge->shouldShowGrounditemsFUSER();

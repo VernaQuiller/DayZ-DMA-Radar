@@ -22,6 +22,7 @@
 #include "DayZ/Maps/Takistan.h"
 #include "DayZ/Maps/Banov.h"
 
+
 int main()
 {
 
@@ -47,11 +48,18 @@ int main()
     cmd.getBridge()->addMap(std::shared_ptr<DayZ::Takistan>(new DayZ::Takistan()));
     cmd.getBridge()->addMap(std::shared_ptr<DayZ::Banov>(new DayZ::Banov()));
 
+
     cmd.getBridge()->setRadar(std::make_shared<DayZ::RadarAdapter>(memUpdater, cmd.getBridge()));
 
     std::thread gfxThread(&DMARender::RenderWindow::initializeWindow, &cmd);
 
+
+
+
     gfxThread.join();
+
+
+
     memUpdater->endUpdateLoop();
 
     return 1;

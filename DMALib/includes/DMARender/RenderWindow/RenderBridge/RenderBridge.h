@@ -20,10 +20,10 @@ namespace DMARender {
 
 		bool showDeadPlayers = true;
 		bool showVehicles = true;
-		bool showGrounditems = false;
+		bool showGrounditems = true;
 		bool showBoats = true;
 		bool showDeadAnimals = true;
-		bool showClothing = false;
+		bool showClothing = true;
 		bool showWeapons = true;
 		bool showProxyMagazines = true;
 		bool showBackpacks = true;
@@ -32,7 +32,7 @@ namespace DMARender {
 		bool showAmmo = true;
 		bool showPlayerList = true;
 		bool showServerPlayerList = false;
-		bool showZombies = false;
+		bool showZombies = true;
 		bool showAnimals = true;
 		std::string playername =  "Survivor";
 		int BlipSize = 7;
@@ -54,14 +54,14 @@ namespace DMARender {
 		bool showGrounditemsFUSER = true;
 		bool showBoatsFUSER = true;
 		bool showDeadAnimalsFUSER = true;
-		bool showClothingFUSER = false;
+		bool showClothingFUSER = true;
 		bool showWeaponsFUSER = true;
 		bool showProxyMagazinesFUSER = true;
 		bool showBackpacksFUSER = true;
 		bool showRareFUSER = true;
 		bool showFoodFUSER = true;
 		bool showAmmoFUSER = true;
-		bool showZombiesFUSER = false;
+		bool showZombiesFUSER = true;
 		bool showAnimalsFUSER = true;
 		int lootDistanceFUSER = 70;
 		int ZombieDistanceFUSER = 100;
@@ -71,7 +71,7 @@ namespace DMARender {
 		bool showBaseFUSER = true;
 		bool showMeleeFUSER = true;
 		bool showExplosivesFUSER = true;
-		int LootDebugDistance = 70;
+		int LootDebugDistance = 30;
 
 
 
